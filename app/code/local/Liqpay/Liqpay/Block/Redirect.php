@@ -18,7 +18,7 @@
  * EXTENSION INFORMATION
  *
  * Magento          Community Edition 1.8.1.0
- * LiqPay API       Click&Buy 1.2 (https://dev.test.liqpay.com/ru/doc)
+ * LiqPay API       Click&Buy 1.2 (https://www.liqpay.com/ru/doc)
  * Way of payment   Visa / MasterCard, or LiqPay
  *
  */
