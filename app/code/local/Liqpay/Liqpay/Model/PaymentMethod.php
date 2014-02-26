@@ -79,9 +79,6 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $result_url = Mage::getUrl('liqpay/payment/result');
         $server_url = Mage::getUrl('liqpay/payment/server');
 
-//$result_url = str_replace('liqpay2.magento.local', '10.42.11.35', $result_url);
-//$server_url = str_replace('liqpay2.magento.local', '10.42.11.35', $server_url);
-
         $type = $this->getConfigData('liqpay_type');
 
         $signature = base64_encode(sha1(join('',compact(
