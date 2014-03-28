@@ -85,15 +85,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </liqpay_action>
-                        <liqpay_type translate="label">
-                            <label>Type</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>liqpay/typeValue</source_model>
-                            <sort_order>90</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </liqpay_type>
                     </fields>
                 </liqpay>
             </groups>

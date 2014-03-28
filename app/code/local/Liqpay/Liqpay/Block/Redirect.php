@@ -50,10 +50,12 @@ class Liqpay_Liqpay_Block_Redirect extends Mage_Core_Block_Template
     {
         $paymentMethod = Mage::getModel('liqpay/paymentMethod');
 
+        //$form = new Form();
         $form = new Varien_Data_Form();
         $form->setAction($paymentMethod->getLiqpayPlaceUrl())
              ->setId('liqpay_redirect')
              ->setName('liqpay_redirect')
+             ->setData('accept-charset', 'utf-8')
              ->setUseContainer(true)
              ->setMethod('POST');
 
