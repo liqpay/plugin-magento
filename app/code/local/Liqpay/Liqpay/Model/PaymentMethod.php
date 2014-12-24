@@ -10,7 +10,7 @@
  *
  * @category        Liqpay
  * @package         Liqpay_Liqpay
- * @version         0.0.1
+ * @version         3.0
  * @author          Liqpay
  * @copyright       Copyright (c) 2014 Liqpay
  * @license         http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
@@ -68,35 +68,36 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         }
 
         $private_key = $this->getConfigData('liqpay_private_key');
-        $public_key = $this->getConfigData('liqpay_public_key');
-        $amount = $order->getBaseGrandTotal();
-        $currency = $order->getOrderCurrencyCode();
+        $public_key  = $this->getConfigData('liqpay_public_key');
+        $amount      = $order->getBaseGrandTotal();
+        $currency    = $order->getOrderCurrencyCode();
 
         if ($currency == 'RUR') { $currency = 'RUB'; }
 
-        $order_id = $order->getIncrementId();
+        $order_id    = $order->getIncrementId();
         $description = 'Заказ №'.$order_id;
-        $result_url = Mage::getUrl('liqpay/payment/result');
-        $server_url = Mage::getUrl('liqpay/payment/server');
+        $result_url  = Mage::getUrl('liqpay/payment/result');
+        $server_url  = Mage::getUrl('liqpay/payment/server');
+        $type        = 'buy';
+        $version     = '3';
+        $language    = 'ru';
 
-        $type = 'buy';
+        $data = base64_encode(
+                    json_encode(
+                            array('version'     => $version,
+                                  'public_key'  => $public_key,
+                                  'amount'      => $amount,
+                                  'currency'    => $currency,
+                                  'description' => $description,
+                                  'order_id'    => $order_id,
+                                  'type'        => $type,
+                                  'language'    => $language)
+                                )
+                            );
 
-        $signature = base64_encode(sha1(join('',compact(
-            'private_key',
-            'amount',
-            'currency',
-            'public_key',
-            'order_id',
-            'type',
-            'description',
-            'result_url',
-            'server_url'
-        )),1));
+        $signature = base64_encode(sha1($private_key.$data.$private_key, 1));
 
-        $language = 'ru';
-
-        return compact('public_key','amount','currency','description','order_id',
-                       'result_url','server_url','type','signature','language');
+        return compact('data','signature');
     }
 
 
@@ -150,29 +151,21 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     public function processNotification($post)
     {
         $success =
-            isset($post['signature']) &&
-            isset($post['sender_phone']) &&
-            isset($post['transaction_id']) &&
-            isset($post['status']) &&
-            isset($post['order_id']) &&
-            isset($post['type']) &&
-            isset($post['description']) &&
-            isset($post['currency']) &&
-            isset($post['amount']) &&
-            isset($post['public_key']);
+            isset($post['data']) &&
+            isset($post['signature']);
 
         if (!$success) { die(); }
-
-        $signature = $post['signature'];
-        $sender_phone = $post['sender_phone'];
-        $transaction_id = $post['transaction_id'];
-        $status = $post['status'];
-        $order_id = $post['order_id'];
-        $type = $post['type'];
-        $description = $post['description'];
-        $currency = $post['currency'];
-        $amount = $post['amount'];
-        $public_key = $post['public_key'];
+        
+        $data                = $post['data'];
+        $parsed_data         = json_decode(base64_decode($data));
+        $received_signature  = $post['signature'];
+        $received_public_key = $parsed_data['public_key'];
+        $order_id            = $parsed_data['order_id'];
+        $status              = $parsed_data['status'];
+        $sender_phone        = $parsed_data['sender_phone'];
+        $amount              = $parsed_data['amount'];
+        $currency            = $parsed_data['currency'];
+        $transaction_id      = $parsed_data['transaction_id'];
 
         if ($order_id <= 0) { die(); }
         $order = Mage::getModel('sales/order');
@@ -180,21 +173,11 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         if (!$order->getId()) { die(); }
 
         $private_key = $this->getConfigData('liqpay_private_key');
+        $public_key  = $this->getConfigData('liqpay_public_key');
 
-        $gensig = base64_encode(sha1(join('',compact(
-            'private_key',
-            'amount',
-            'currency',
-            'public_key',
-            'order_id',
-            'type',
-            'description',
-            'status',
-            'transaction_id',
-            'sender_phone'
-        )),1));
+        $generated_signature = base64_encode(sha1($private_key.$data.$private_key, 1));
 
-        if ($signature != $gensig) {
+        if ($received_signature != $generated_signature || $public_key != $received_public_key) {
             $order->addStatusToHistory(
                 $order->getStatus(),
                 Mage::helper('liqpay')->__('Security check failed!')
