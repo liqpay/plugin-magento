@@ -60,7 +60,10 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     */
     public function getRedirectFormFields()
     {
+        /** @var Mage_Checkout_Model_Session $session */
         $session = Mage::getSingleton('checkout/session');
+
+        /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order')->loadByIncrementId($session->getLastRealOrderId());
 
         if (!$order->getId()) {
@@ -72,10 +75,12 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $amount      = $order->getBaseGrandTotal();
         $currency    = $order->getOrderCurrencyCode();
 
-        if ($currency == 'RUR') { $currency = 'RUB'; }
+        if ($currency == 'RUR') {
+            $currency = 'RUB';
+        }
 
         $order_id    = $order->getIncrementId();
-        $description = 'Заказ №'.$order_id;
+        $description = 'Заказ №' . $order_id;
         $result_url  = Mage::getUrl('liqpay/payment/result');
         $server_url  = Mage::getUrl('liqpay/payment/server');
         $type        = 'buy';
@@ -83,21 +88,23 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $language    = 'ru';
 
         $data = base64_encode(
-                    json_encode(
-                            array('version'     => $version,
-                                  'public_key'  => $public_key,
-                                  'amount'      => $amount,
-                                  'currency'    => $currency,
-                                  'description' => $description,
-                                  'order_id'    => $order_id,
-                                  'type'        => $type,
-                                  'language'    => $language)
-                                )
-                            );
+            json_encode(
+                array(
+                    'version'     => $version,
+                    'public_key'  => $public_key,
+                    'amount'      => $amount,
+                    'currency'    => $currency,
+                    'description' => $description,
+                    'order_id'    => $order_id,
+                    'type'        => $type,
+                    'language'    => $language
+                )
+            )
+        );
 
-        $signature = base64_encode(sha1($private_key.$data.$private_key, 1));
+        $signature = base64_encode(sha1($private_key . $data . $private_key, 1));
 
-        return compact('data','signature');
+        return compact('data', 'signature');
     }
 
 
@@ -105,7 +112,7 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     * Get redirect url.
     * Return Order place redirect url.
     *
-    * @return
+    * @return string
     */
     public function getOrderPlaceRedirectUrl()
     {
@@ -131,7 +138,7 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @param string $paymentAction
      * @param object $stateObject
      *
-     * @return Mage_Payment_Model_Abstract
+     * @return Mage_Payment_Model_Method_Abstract
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -144,17 +151,21 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
 
 
     /**
-    *
-    * Validate data from LiqPay server and update the database
-    *
-    */
+     * Validate data from LiqPay server and update the database
+     *
+     * @var array $post
+     *
+     * @return void
+     */
     public function processNotification($post)
     {
         $success =
             isset($post['data']) &&
             isset($post['signature']);
 
-        if (!$success) { die(); }
+        if (!$success) {
+            Mage::throwException(Mage::helper('liqpay')->__('Data or signature is empty'));
+        }
         
         $data                = $post['data'];
         $parsed_data         = json_decode(base64_decode($data));
@@ -167,21 +178,26 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $currency            = $parsed_data['currency'];
         $transaction_id      = $parsed_data['transaction_id'];
 
-        if ($order_id <= 0) { die(); }
+        if ($order_id <= 0) {
+            Mage::throwException(Mage::helper('liqpay')->__('Order id is not set'));
+        }
+
+        /** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($order_id);
-        if (!$order->getId()) { die(); }
+
+        if (!$order->getId()) {
+            Mage::throwException(Mage::helper('liqpay')->__('Cannot load order'));
+        }
 
         $private_key = $this->getConfigData('liqpay_private_key');
         $public_key  = $this->getConfigData('liqpay_public_key');
 
-        $generated_signature = base64_encode(sha1($private_key.$data.$private_key, 1));
+        $generated_signature = base64_encode(sha1($private_key . $data . $private_key, 1));
 
         if ($received_signature != $generated_signature || $public_key != $received_public_key) {
-            $order->addStatusToHistory(
-                $order->getStatus(),
-                Mage::helper('liqpay')->__('Security check failed!')
-            )->save();
+            $order->addStatusHistoryComment(Mage::helper('liqpay')->__('Security check failed!'));
+            $order->save();
             return;
         }
 
@@ -208,20 +224,16 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
                 );
 
                 $sDescription = '';
-                $sDescription .= 'sender phone: '.$sender_phone.'; ';
-                $sDescription .= 'amount: '.$amount.'; ';
-                $sDescription .= 'currency: '.$currency.'; ';
+                $sDescription .= 'sender phone: ' . $sender_phone . '; ';
+                $sDescription .= 'amount: ' . $amount . '; ';
+                $sDescription .= 'currency: ' . $currency . '; ';
 
-                $order->addStatusToHistory(
-                    $order->getStatus(),
-                    $sDescription
-                )->save();
+                $order->addStatusHistoryComment($sDescription)
+                    ->setIsCustomerNotified($notified);
+
             } else {
-                $order->addStatusToHistory(
-                    $order->getStatus(),
-                    Mage::helper('liqpay')->__('Error during creation of invoice.', true),
-                    $notified = true
-                );
+                $order->addStatusHistoryComment(Mage::helper('liqpay')->__('Error during creation of invoice.'))
+                    ->setIsCustomerNotified($notified = true);
             }
         }
         elseif ($status == 'failure') {
