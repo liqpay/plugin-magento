@@ -107,6 +107,8 @@
                 <active>1</active>
                 <model>liqpay/paymentMethod</model>
                 <title>Liqpay (www.liqpay.com)</title>
+                <language>ru</language>
+                <sandbox>0</sandbox>
                 <liqpay_action>https://www.liqpay.com/api/checkout</liqpay_action>
             </liqpay>
         </payment>
