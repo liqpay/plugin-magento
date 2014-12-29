@@ -80,27 +80,35 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         }
 
         $order_id    = $order->getIncrementId();
-        $description = 'Заказ №' . $order_id;
+        $description = Mage::helper('liqpay')->__('Заказ') . ' №' . $order_id;
         $result_url  = Mage::getUrl('liqpay/payment/result');
         $server_url  = Mage::getUrl('liqpay/payment/server');
         $type        = 'buy';
         $version     = '3';
-        $language    = 'ru';
+        $language    = $this->getConfigData('language');
+        $sandbox     = $this->getConfigData('sandbox');
 
-        $data = base64_encode(
-            json_encode(
-                array(
-                    'version'     => $version,
-                    'public_key'  => $public_key,
-                    'amount'      => $amount,
-                    'currency'    => $currency,
-                    'description' => $description,
-                    'order_id'    => $order_id,
-                    'type'        => $type,
-                    'language'    => $language
-                )
-            )
+        $request = array(
+            'version'     => $version,
+            'public_key'  => $public_key,
+            'amount'      => $amount,
+            'currency'    => $currency,
+            'description' => $description,
+            'order_id'    => $order_id,
+            'type'        => $type,
+            'language'    => $language
         );
+
+        if ($sandbox) {
+            $request['sandbox'] = 1;
+        }
+
+        $this->_debug(array(
+            'url' => $this->getLiqpayPlaceUrl(),
+            'request' => $request
+        ));
+
+        $data = base64_encode(json_encode($request));
 
         $signature = base64_encode(sha1($private_key . $data . $private_key, 1));
 
@@ -249,6 +257,9 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
                 Mage::helper('liqpay')->__('Waiting for verification from the Liqpay side.'),
                 $notified = true
             );
+        }
+        else {
+            Mage::throwException(Mage::helper('liqpay')->__('Unexpected status from server: %s', $status));
         }
 
         $order->save();

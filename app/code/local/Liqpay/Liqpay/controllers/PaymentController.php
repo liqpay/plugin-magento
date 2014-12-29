@@ -80,6 +80,7 @@ class Liqpay_Liqpay_PaymentController extends Mage_Core_Controller_Front_Action
      */
     public function resultAction()
     {
+        /** @var Mage_Checkout_Model_Session $session */
         $session = Mage::getSingleton('checkout/session');
 
         $order_id = $session->getLiqpayLastRealOrderId();
@@ -92,10 +93,20 @@ class Liqpay_Liqpay_PaymentController extends Mage_Core_Controller_Front_Action
             return false;
         }
 
-        $order->addStatusToHistory(
-            $order->getStatus(),
-            Mage::helper('liqpay')->__('Customer successfully got back from Liqpay payment interface.')
-        )->save();
+        $method = $this->getLiqpay();
+        if ($method->getConfigData('sandbox')) {
+            $order->addStatusHistoryComment(
+                Mage::helper('liqpay')->__('Invoice was placed in sandbox mode.'),
+                Mage_Sales_Model_Order::STATE_PROCESSING
+            );
+        }
+
+        $order->addStatusHistoryComment(
+            Mage::helper('liqpay')
+                ->__('Customer successfully got back from Liqpay payment interface.')
+        );
+
+        $order->save();
 
         $session->setQuoteId($quote_id);
         $session->getQuote()->setIsActive(false)->save();
