@@ -104,7 +104,9 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             'order_id'    => $order_id,
             // 'type'        => $type,
             'action'      => $action,
-            'language'    => $language
+            'language'    => $language,
+            'result_url'  => $result_url,
+            'server_url'  => $server_url
         );
 
         if ($sandbox) {
