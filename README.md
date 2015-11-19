@@ -6,6 +6,7 @@ LiqPay plugin for magento CMS
 Tags:
 - checkout3.0 - для работы с Liqpay API https://www.liqpay.com/ru/doc/checkout
 - liq&buy3.0 - для работы с Liqpay API https://www.liqpay.com/ru/doc/liq_buy
+
 Более подробно о работе с системой Liqpay https://www.liqpay.com/ru/doc
 
 Tested for Magento version:
