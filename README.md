@@ -3,6 +3,11 @@ plugin-magento
 
 LiqPay plugin for magento CMS
 
+Tags:
+- checkout3.0 - для работы с Liqpay API https://www.liqpay.com/ru/doc/checkout
+- liq&buy3.0 - для работы с Liqpay API https://www.liqpay.com/ru/doc/liq_buy
+Более подробно о работе с системой Liqpay https://www.liqpay.com/ru/doc
+
 Tested for Magento version:
 - 1.9 
 - 1.8
@@ -10,4 +15,4 @@ Tested for Magento version:
 
 Для того, чтобы установить платежный модуль Liqpay, необходимо добавить содержимое каталога /app в соответствующий каталог Magento. Более детально http://magebox.ru/extensions-setup/
 
-Более подробно о работе с системой Liqpay https://www.liqpay.com/ru/doc
+
