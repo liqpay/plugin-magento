@@ -15,7 +15,9 @@ Tested for Magento version:
 - 1.7
 
 #### Для установки модуля Liqpay:
-добавить содержимое каталога /app в соответствующий каталог Magento. 
+...
+добавить содержимое каталога /app в соответствующий каталог Magento
+...
 Более детально http://magebox.ru/extensions-setup/
 
 
