@@ -111,7 +111,7 @@
                 <specificcountry>UA</specificcountry>
                 <language>ru</language>
                 <sandbox>0</sandbox>
-                <liqpay_action>https://www.liqpay.com/api/checkout</liqpay_action>
+                <liqpay_action>https://www.liqpay.com/api/3/checkout</liqpay_action>
                 <liqpay_public_key backend_model="adminhtml/system_config_backend_encrypted" />
                 <liqpay_private_key backend_model="adminhtml/system_config_backend_encrypted" />
                 <debug>0</debug>

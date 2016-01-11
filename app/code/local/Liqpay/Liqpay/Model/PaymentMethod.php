@@ -89,7 +89,8 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $description = Mage::helper('liqpay')->__('Заказ') . ' №' . $order_id;
         $result_url  = Mage::getUrl('liqpay/payment/result');
         $server_url  = Mage::getUrl('liqpay/payment/server');
-        $type        = 'buy';
+        // $type        = 'buy';
+        $action      = 'pay';
         $version     = '3';
         $language    = $this->getConfigData('language');
         $sandbox     = $this->getConfigData('sandbox');
@@ -101,8 +102,11 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             'currency'    => $currency,
             'description' => $description,
             'order_id'    => $order_id,
-            'type'        => $type,
-            'language'    => $language
+            // 'type'        => $type,
+            'action'      => $action,
+            'language'    => $language,
+            'result_url'  => $result_url,
+            'server_url'  => $server_url
         );
 
         if ($sandbox) {
