@@ -78,7 +78,7 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
 
         $private_key = $this->getConfigData('liqpay_private_key');
         $public_key  = $this->getConfigData('liqpay_public_key');
-        $amount      = $order->getBaseGrandTotal();
+        $amount      = $order->getGrandTotal();
         $currency    = $order->getOrderCurrencyCode();
 
         if ($currency == 'RUR') {
@@ -86,7 +86,7 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         }
 
         $order_id    = $order->getIncrementId();
-        $description = Mage::helper('liqpay')->__('Заказ') . ' №' . $order_id;
+        $description = Mage::helper('liqpay')->__('Order') . ' №' . $order_id;
         $result_url  = Mage::getUrl('liqpay/payment/result');
         $server_url  = Mage::getUrl('liqpay/payment/server');
         // $type        = 'buy';
