@@ -31,12 +31,6 @@
  */
 class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
 {
-    const STATUS_SUCCESS     = 'success';
-    const STATUS_FAILURE     = 'failure';
-    const STATUS_WAIT_SECURE = 'wait_secure';
-    const STATUS_WAIT_ACCEPT = 'wait_accept';
-    const STATUS_SANDBOX     = 'sandbox';
-
     /**
      * Payment Method features
      * @var bool
@@ -177,24 +171,20 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      */
     public function processNotification($post)
     {
-        $this->_debug(array(
-            'response' => $post
-        ));
 
         $success =
             isset($post['data']) &&
             isset($post['signature']);
 
         if (!$success) {
+			$this->_debug(array(
+				'response' => $post
+	        ));
             Mage::throwException(Mage::helper('liqpay')->__('Data or signature is empty'));
         }
-        
+
         $data         = $post['data'];
         $decoded_data = base64_decode($data);
-
-        $this->_debug(array(
-            'decoded_data' => $decoded_data
-        ));
 
         $parsed_data = json_decode($decoded_data, true, 1024);
 
@@ -215,7 +205,7 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             Mage::throwException(Mage::helper('liqpay')->__('Order id is not set'));
         }
 
-        /** @var Mage_Sales_Model_Order $order */
+		/** @var Mage_Sales_Model_Order $order */
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($order_id);
 
@@ -234,85 +224,64 @@ class Liqpay_Liqpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             return;
         }
 
-        $newOrderStatus = $this->getConfigData('order_status', $order->getStoreId());
-        if (empty($newOrderStatus)) {
-            $newOrderStatus = $order->getStatus();
-        }
+		$status = 'liqpay_' . $status;
+		$statusStates = $order->getConfig()->getStatusStates( $status );
+		if ( empty( $statusStates ) ) {
+			$allStatuses = $order->getConfig()->getStatuses();
+			if ( !array_key_exists( $status, $allStatuses ) ) {
+				$model = Mage::getModel('sales/order_status')->load( $status );
+				$model->setStatus( $status );
+				$model->setLabel( $status . ': see details at https://www.liqpay.com/ru/doc/callback' );
+				$model->save();
+			}
+			$state = Mage_Sales_Model_Order::STATE_HOLDED;
+		} else {
+			$state = array_shift( $statusStates )->getState();
+		}
 
-        switch ($status) {
-            case self::STATUS_SANDBOX:
-            case self::STATUS_SUCCESS:
-                if ($order->canInvoice()) {
-                    $order->getPayment()->setTransactionId($transaction_id);
-                    $invoice = $order->prepareInvoice();
-                    $invoice->register()->pay();
-                    Mage::getModel('core/resource_transaction')
-                        ->addObject($invoice)
-                        ->addObject($invoice->getOrder())
-                        ->save();
+        $this->_debug(array( 'state' => $state ));
 
-                    if (!$this->getConfigData('sandbox')) {
-                        $message = Mage::helper('liqpay')->__(
-                            'Invoice #%s created.',
-                            $invoice->getIncrementId()
-                        );
-                    } else {
-                        $message = Mage::helper('liqpay')->__(
-                            'Invoice #%s created (sandbox).',
-                            $invoice->getIncrementId()
-                        );
-                    }
+		if ( $state != Mage_Sales_Model_Order::STATE_PROCESSING ) {
+			$order->setState( $state, $status, $order->getConfig()->getStatusLabel( $status ), $notified = false );
+			$order->save();
+			return;
+		}
 
-                    $order->setState(
-                        Mage_Sales_Model_Order::STATE_PROCESSING, true,
-                        $message,
-                        $notified = true
-                    );
+		if ( !$order->canInvoice() ) {
+			$order->addStatusHistoryComment(Mage::helper('liqpay')->__('Error during creation of invoice.'))
+				->setIsCustomerNotified($notified = false);
+			return;
+		}
 
-                    $sDescription = '';
-                    $sDescription .= 'sender phone: ' . $sender_phone . '; ';
-                    $sDescription .= 'amount: ' . $amount . '; ';
-                    $sDescription .= 'currency: ' . $currency . '; ';
+		$order->getPayment()->setTransactionId($transaction_id);
+		$invoice = $order->prepareInvoice();
+		$invoice->register()->pay();
+		Mage::getModel('core/resource_transaction')
+			->addObject($invoice)
+			->addObject($invoice->getOrder())
+			->save();
 
-                    $order->addStatusHistoryComment($sDescription)
-                        ->setIsCustomerNotified($notified);
+		if (!$this->getConfigData('sandbox')) {
+			$message = Mage::helper('liqpay')->__(
+				'Invoice #%s created.',
+				$invoice->getIncrementId()
+			);
+		} else {
+			$message = Mage::helper('liqpay')->__(
+				'Invoice #%s created (sandbox).',
+				$invoice->getIncrementId()
+			);
+		}
 
-                } else {
-                    $order->addStatusHistoryComment(Mage::helper('liqpay')->__('Error during creation of invoice.'))
-                        ->setIsCustomerNotified($notified = true);
-                }
-                break;
+		$order->setState( $state, $status, $message, $notified = false );
 
-            case self::STATUS_FAILURE:
-                $order->setState(
-                    Mage_Sales_Model_Order::STATE_CANCELED, $newOrderStatus,
-                    Mage::helper('liqpay')->__('Liqpay error.'),
-                    $notified = true
-                );
-                break;
+		$sDescription = '';
+		$sDescription .= 'sender phone: ' . $sender_phone . '; ';
+		$sDescription .= 'amount: ' . $amount . '; ';
+		$sDescription .= 'currency: ' . $currency . '; ';
 
-            case self::STATUS_WAIT_SECURE:
-                $order->setState(
-                    Mage_Sales_Model_Order::STATE_PROCESSING, $newOrderStatus,
-                    Mage::helper('liqpay')->__('Waiting for verification from the Liqpay side.'),
-                    $notified = true
-                );
-                break;
-
-            case self::STATUS_WAIT_ACCEPT:
-                $order->setState(
-                    Mage_Sales_Model_Order::STATE_PROCESSING, $newOrderStatus,
-                    Mage::helper('liqpay')->__('Waiting for accepting from the buyer side.'),
-                    $notified = true
-                );
-                break;
-
-            default:
-                Mage::throwException(Mage::helper('liqpay')->__('Unexpected status from server: %s', $status));
-                break;
-
-        }
-
-        $order->save();
+		$order->addStatusHistoryComment($sDescription)->setIsCustomerNotified($notified);
+		$order->save();
+		$this->_debug(array( 'order' => 'saved' ));
     }
 }
