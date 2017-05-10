@@ -1,12 +1,12 @@
 plugin-magento
 =============
 
-LiqPay plugin for magento CMS version 2.0
+LiqPay plugin for magento CMS version 2.1
 
 Более подробно о работе с системой Liqpay https://www.liqpay.com/ru/doc
 
 Tested for Magento version:
-- 2.0
+- 2.1
 
 thanks to 
 Volodymyr Konstanchuk http://konstanchuk.com
