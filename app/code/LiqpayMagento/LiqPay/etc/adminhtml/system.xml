@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * LiqPay Extension for Magento 2
+ *
+ * @author     Volodymyr Konstanchuk http://konstanchuk.com
+ * @copyright  Copyright (c) 2017 The authors
+ * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="liqpaymagento_liqpay" translate="label" type="text" sortOrder="50" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>LiqPay</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sandbox" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Test Mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sandbox_order_surfix" translate="label comment" type="text" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Test Order Surfix</label>
+                    <comment><![CDATA[For example: 000000005-<b>test</b>]]></comment>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="public_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Public Key</label>
+                </field>
+                <field id="private_key" translate="label" type="obscure" sortOrder="40" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Private Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="60" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Payment from Applicable Countries</label>
+                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="70" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Payment from Specific Countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                </field>
+                <field id="description" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Order Description</label>
+                </field>
+                <field id="security_check" translate="label" type="select" sortOrder="90" showInDefault="0" showInWebsite="0"
+                       showInStore="0">
+                    <label>LiqPay Callback Security Check</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Enable keys validation on request callback from liqpay. Don't set "No" because of fraud!]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

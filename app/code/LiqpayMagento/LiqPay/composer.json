@@ -1,0 +1,28 @@
+{
+  "name": "liqpaymagento/liqpay",
+  "description": "LiqPay Payment",
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Volodymyr Konstanchuk",
+      "email": "vova.konstanchuk@gmail.com",
+      "homepage": "http://konstanchuk.com"
+    }
+  ],
+  "require": {
+    "php": "^7.0",
+    "liqpay/liqpay": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "LiqpayMagento\\LiqPay\\": ""
+    }
+  }
+}

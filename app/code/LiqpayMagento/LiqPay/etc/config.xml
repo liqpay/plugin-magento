@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * LiqPay Extension for Magento 2
+ *
+ * @author     Volodymyr Konstanchuk http://konstanchuk.com
+ * @copyright  Copyright (c) 2017 The authors
+ * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <liqpaymagento_liqpay>
+                <active>0</active>
+                <sandbox>0</sandbox>
+                <sandbox_order_surfix>test</sandbox_order_surfix>
+                <model>LiqpayMagento\LiqPay\Model\Payment</model>
+                <payment_action>authorize_capture</payment_action>
+                <title>LiqPay</title>
+                <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <allowspecific>0</allowspecific>
+                <description><![CDATA[Purchase of goods in the store. Order #{order_id}.]]></description>
+                <security_check>1</security_check>
+            </liqpaymagento_liqpay>
+        </payment>
+    </default>
+</config>

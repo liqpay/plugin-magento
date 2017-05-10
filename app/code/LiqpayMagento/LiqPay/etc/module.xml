@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * LiqPay Extension for Magento 2
+ *
+ * @author     Volodymyr Konstanchuk http://konstanchuk.com
+ * @copyright  Copyright (c) 2017 The authors
+ * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="LiqpayMagento_LiqPay" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Payment"/>
+            <module name="Magento_Checkout"/>
+            <module name="Magento_Sales"/>
+            <module name="Magento_Quote"/>
+        </sequence>
+    </module>
+</config>
