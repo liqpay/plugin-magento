@@ -1,5 +1,0 @@
-app/code/local/* app/code/local/
-app/design/frontend/base/default/template/* app/design/frontend/base/default/template/
-app/etc/modules/Liqpay_Liqpay.xml app/etc/modules/Liqpay_Liqpay.xml
-app/locale/ru_RU/Liqpay_Liqpay.csv app/locale/ru_RU/Liqpay_Liqpay.csv
-
