@@ -6,7 +6,7 @@ LiqPay plugin for magento CMS version 2.1
 Более подробно о работе с системой Liqpay https://www.liqpay.com/ru/doc
 
 Tested for Magento version:
-- 2.1
+- 2.1.6
 
 thanks to 
 Volodymyr Konstanchuk http://konstanchuk.com
@@ -55,10 +55,16 @@ Callback:
 - в настройках мерчанта Liqpay указать server_url​ http://your_host/rest/V1/liqpay/callback, где ​http://your_host - адрес вашего сайта.
 - после проведения платежа Liqpay пришлет запрос на http://your_host/rest/V1/liqpay/callback, более подробна на https://www.liqpay.com/ru/doc/callback
 
+
+
 Troubleshooting:
+
 - может понадобиться изменение лимита памяти в файле конфигурации, например:
 chown apache:root /var/www/
 grep memory_limit /etc/php.ini  # set memory limit for composer
 memory_limit = 1280M
 ;memory_limit = 128M
+
+- если товар не добавляется в корзину, попробуйте
+http://magehelper.blogspot.in/2017/03/magento-2-cannot-add-products-to-cart.html
 
