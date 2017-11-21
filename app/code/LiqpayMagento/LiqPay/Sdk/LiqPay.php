@@ -77,10 +77,10 @@ class LiqPay extends \LiqPay
         return $this->_supportedCurrencies;
     }
 
-    public function api($path, $params = array())
+    public function api($path, $params = array(), $timeout = 5)
     {
         $params = $this->prepareParams($params);
-        return parent::api($path, $params);
+        return parent::api($path, $params, $timeout);
     }
 
     public function cnb_form($params)
