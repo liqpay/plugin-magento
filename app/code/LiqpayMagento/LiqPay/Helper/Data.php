@@ -118,11 +118,15 @@ class Data extends AbstractHelper
     public function securityOrderCheck($data, $receivedPublicKey, $receivedSignature)
     {
         if ($this->isSecurityCheck()) {
-            $privateKey = $this->getPrivateKey();
             $publicKey = $this->getPublicKey();
+            if ($publicKey !== $receivedPublicKey) {
+                return false;
+            }            
+            
+            $privateKey = $this->getPrivateKey();
             $generatedSignature = base64_encode(sha1($privateKey . $data . $privateKey, 1));
-            return $privateKey && $publicKey
-                && $receivedSignature == $generatedSignature || $publicKey == $receivedPublicKey;
+            
+            return $receivedSignature === $generatedSignature;
         } else {
             return true;
         }
