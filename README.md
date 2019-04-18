@@ -3,7 +3,7 @@ plugin-magento
 
 LiqPay plugin for magento CMS version 2.0
 
-Более подробно о работе с системой Liqpay https://www.liqpay.com/ru/doc
+Более подробно о работе с системой Liqpay https://www.liqpay.ua/documentation/ru
 
 Tested for Magento version:
 - 2.0
@@ -53,7 +53,7 @@ cache:clean).
 Callback:
 для получения результата проведения платежа на сервер нужно:
 - в настройках мерчанта Liqpay указать server_url​ http://your_host/rest/V1/liqpay/callback, где ​http://your_host - адрес вашего сайта.
-- после проведения платежа Liqpay пришлет запрос на http://your_host/rest/V1/liqpay/callback, более подробна на https://www.liqpay.com/ru/doc/callback
+- после проведения платежа Liqpay пришлет запрос на http://your_host/rest/V1/liqpay/callback, более подробна на https://www.liqpay.ua/documentation/api/callback
 
 Troubleshooting:
 - может понадобиться изменение лимита памяти в файле конфигурации, например:
