@@ -19,7 +19,7 @@
  * EXTENSION INFORMATION
  *
  * Magento          Community Edition 1.8.1.0
- * LiqPay API       Click&Buy 1.2 (https://www.liqpay.com/ru/doc)
+ * LiqPay API       Click&Buy 1.2 (https://www.liqpay.ua/documentation/ru)
  * Way of payment   Visa / MasterCard, or LiqPay
  *
  */
@@ -94,7 +94,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[<a target="_blank" href="https://www.liqpay.com/admin/business">получить публичный ключ</a>]]></comment>
+                            <comment><![CDATA[<a target="_blank" href="https://www.liqpay.ua/admin/business">получить публичный ключ</a>]]></comment>
                         </liqpay_public_key>
                         <liqpay_private_key translate="label">
                             <label>Private Key</label>
@@ -104,7 +104,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[<a target="_blank" href="https://www.liqpay.com/admin/business">получить приватный ключ</a>]]></comment>
+                            <comment><![CDATA[<a target="_blank" href="https://www.liqpay.ua/admin/business">получить приватный ключ</a>]]></comment>
                         </liqpay_private_key>
                         <liqpay_action translate="label">
                             <label>Liqpay URL (action)</label>

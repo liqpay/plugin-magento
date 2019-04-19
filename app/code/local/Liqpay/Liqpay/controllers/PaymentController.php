@@ -18,7 +18,7 @@
 * EXTENSION INFORMATION
 *
 * Magento          Community Edition 1.8.1.0
-* LiqPay API       Click&Buy 1.2 (https://www.liqpay.com/ru/doc)
+* LiqPay API       Click&Buy 1.2 (https://www.liqpay.ua/documentation/ru)
 * Way of payment   Visa / MasterCard, or LiqPay
 *
 */
@@ -26,7 +26,7 @@
 /**
 * Payment method liqpay controller
 *
-* @author      Liqpay <support@liqpay.com>
+* @author      Liqpay <support@liqpay.ua>
 */
 class Liqpay_Liqpay_PaymentController extends Mage_Core_Controller_Front_Action
 {
