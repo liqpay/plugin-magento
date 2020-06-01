@@ -20,6 +20,7 @@
                 <payment_action>authorize_capture</payment_action>
                 <title>LiqPay</title>
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <language>uk</language>
                 <allowspecific>0</allowspecific>
                 <description><![CDATA[Purchase of goods in the store. Order #{order_id}.]]></description>
                 <security_check>1</security_check>

@@ -10,7 +10,12 @@
 
 namespace LiqpayMagento\LiqPay\Model;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
+/**
+ * Class Payment
+ * @package LiqpayMagento\LiqPay\Model
+ */
 class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 {
     const METHOD_CODE = 'liqpaymagento_liqpay';
@@ -39,6 +44,22 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected $_urlBuilder;
 
+    /**
+     * Payment constructor.
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Payment\Model\Method\Logger $logger
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param DirectoryHelper|null $directory
+     * @param \Magento\Framework\UrlInterface $urlBuider
+     * @param \LiqpayMagento\LiqPay\Sdk\LiqPay $liqPay
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -47,11 +68,13 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        DirectoryHelper $directory = null,
         \Magento\Framework\UrlInterface $urlBuider,
-        \LiqpayMagento\LiqPay\Sdk\LiqPay $liqPay,
-        array $data = array()
-    )
-    {
+        \LiqpayMagento\LiqPay\Sdk\LiqPay $liqPay
+    ) {
         parent::__construct(
             $context,
             $registry,
@@ -60,17 +83,20 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
             $paymentData,
             $scopeConfig,
             $logger,
-            null,
-            null,
-            $data
+            $resource,
+            $resourceCollection,
+            $data, $directory
         );
-
+        $this->_urlBuilder = $urlBuider;
         $this->_liqPay = $liqPay;
         $this->_supportedCurrencyCodes = $liqPay->getSupportedCurrencies();
         $this->_minOrderTotal = $this->getConfigData('min_order_total');
-        $this->_urlBuilder = $urlBuider;
     }
 
+    /**
+     * @param $currencyCode
+     * @return bool
+     */
     public function canUseForCurrency($currencyCode)
     {
         if (!in_array($currencyCode, $this->_supportedCurrencyCodes)) {
@@ -79,6 +105,11 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         return true;
     }
 
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @param $amount
+     * @return $this
+     */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         /** @var \Magento\Sales\Model\Order $order */
@@ -93,6 +124,10 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         }
     }
 
+    /**
+     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
+     * @return bool
+     */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if (!$this->_liqPay->getHelper()->isEnabled()) {

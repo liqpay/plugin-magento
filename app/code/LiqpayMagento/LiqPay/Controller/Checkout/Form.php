@@ -18,7 +18,10 @@ use Magento\Framework\View\LayoutFactory;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use LiqpayMagento\LiqPay\Helper\Data as Helper;
 
-
+/**
+ * Class Form
+ * @package LiqpayMagento\LiqPay\Controller\Checkout
+ */
 class Form extends Action
 {
     /**
@@ -36,17 +39,20 @@ class Form extends Action
      */
     protected $_layoutFactory;
 
+    /**
+     * Form constructor.
+     * @param Context $context
+     * @param CheckoutSession $checkoutSession
+     * @param Helper $helper
+     */
     public function __construct(
         Context $context,
         CheckoutSession $checkoutSession,
-        Helper $helper,
-        LayoutFactory $layoutFactory
-    )
-    {
+        Helper $helper
+    ) {
         parent::__construct($context);
         $this->_checkoutSession = $checkoutSession;
         $this->_helper = $helper;
-        $this->_layoutFactory = $layoutFactory;
     }
 
     /**
@@ -67,11 +73,11 @@ class Form extends Action
             }
             if ($this->_helper->checkOrderIsLiqPayPayment($order)) {
                 /* @var $formBlock \LiqpayMagento\LiqPay\Block\SubmitForm */
-                $formBlock = $this->_layoutFactory->create()->createBlock('LiqpayMagento\LiqPay\Block\SubmitForm');
+                $formBlock =  $this->_view->getLayout()->createBlock('LiqpayMagento\LiqPay\Block\SubmitForm');
                 $formBlock->setOrder($order);
                 $data = [
                     'status' => 'success',
-                    'content' => $formBlock->toHtml(),
+                    'content' => $formBlock->getLiqpayForm(),
                 ];
             } else {
                 throw new \Exception('Order payment method is not a LiqPay payment method');

@@ -43,6 +43,11 @@
                     <label>Private Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
+                <field id="language" translate="label" type="select" sortOrder="50" showInDefault="1"
+                       showInWebsite="1" showInStore="1" >
+                    <label>Payment Language</label>
+                    <source_model>LiqpayMagento\LiqPay\Model\Config\Source\PaymentLanguage</source_model>
+                </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="60" showInDefault="1"
                        showInWebsite="1" showInStore="0">
                     <label>Payment from Applicable Countries</label>
