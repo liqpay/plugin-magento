@@ -24,39 +24,83 @@
                        showInStore="0">
                     <label>Test Mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
                 </field>
                 <field id="sandbox_order_surfix" translate="label comment" type="text" sortOrder="20" showInDefault="1"
                        showInWebsite="1" showInStore="0">
                     <label>Test Order Surfix</label>
                     <comment><![CDATA[For example: 000000005-<b>test</b>]]></comment>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="sandbox">1</field>
+                    </depends>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
                        showInStore="1">
                     <label>Title</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="sendbox_public_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Test Public Key</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="sandbox">1</field>
+                    </depends>
+                </field>
+                <field id="sendbox_private_key" translate="label" type="obscure" sortOrder="40" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Test Private Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="sandbox">1</field>
+                    </depends>
                 </field>
                 <field id="public_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
                        showInStore="0">
                     <label>Public Key</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="sandbox">0</field>
+                    </depends>
                 </field>
                 <field id="private_key" translate="label" type="obscure" sortOrder="40" showInDefault="1"
                        showInWebsite="1" showInStore="0">
                     <label>Private Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="sandbox">0</field>
+                    </depends>
                 </field>
                 <field id="language" translate="label" type="select" sortOrder="50" showInDefault="1"
                        showInWebsite="1" showInStore="1" >
                     <label>Payment Language</label>
                     <source_model>LiqpayMagento\LiqPay\Model\Config\Source\PaymentLanguage</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
                 </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="60" showInDefault="1"
                        showInWebsite="1" showInStore="0">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
                 </field>
                 <field id="specificcountry" translate="label" type="multiselect" sortOrder="70" showInDefault="1"
                        showInWebsite="1" showInStore="0">
                     <label>Payment from Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
                 </field>
                 <field id="description" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1"
                        showInStore="1">

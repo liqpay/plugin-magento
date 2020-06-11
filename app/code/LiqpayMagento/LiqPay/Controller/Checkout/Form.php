@@ -14,7 +14,6 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use LiqpayMagento\LiqPay\Helper\Data as Helper;
 
@@ -33,11 +32,6 @@ class Form extends Action
      * @var Helper
      */
     protected $_helper;
-
-    /**
-     * @var LayoutFactory
-     */
-    protected $_layoutFactory;
 
     /**
      * Form constructor.
