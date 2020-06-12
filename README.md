@@ -1,15 +1,14 @@
 plugin-magento
 =============
 
-LiqPay plugin for magento CMS version 2.1
+LiqPay plugin for magento CMS version 2.3.3
 
 Более подробно о работе с системой Liqpay https://www.liqpay.ua/documentation/ru
 
 Tested for Magento version:
-- 2.1.6
+- 2.3.3
 
-thanks to 
-Volodymyr Konstanchuk http://konstanchuk.com
+Update for compatibility with Magento 2.3 - Arthur Agratina
 
 Основные функции:
 - прием платежей с помощью платежней системы LiqPay;
@@ -37,9 +36,10 @@ php bin/magento cache:clean
 Настройка:
 - перейдите в admin -> stores -> configuration -> sales -> payment methods -> liqpay
 (должен быть в самом низу);
-- указать приватный и публичный ключ в настройках и включить модуль в поле
-Enabled. (если приватный и публичный ключ не указан, он не будет включен)
-- выбрать режим (тестовый или не тестовый)
+- включить модуль в поле Enabled
+- выбрать режим (тестовый или не тестовый).
+- указать приватный и публичный ключ в настройках. Для тестового режима свои поля. 
+(если приватный и публичный ключ не указан, он не будет включен)
 - после изменения любой конфигурации нужно чистить кеш (php bin/magento
 cache:clean).
 

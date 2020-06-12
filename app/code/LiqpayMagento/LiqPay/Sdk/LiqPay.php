@@ -38,10 +38,13 @@ class LiqPay extends \LiqPay
 
     protected $_helper;
 
+    /**
+     * LiqPay constructor.
+     * @param \LiqpayMagento\LiqPay\Helper\Data $helper
+     */
     public function __construct(
         \LiqpayMagento\LiqPay\Helper\Data $helper
-    )
-    {
+    ) {
         $this->_helper = $helper;
         if ($helper->isEnabled()) {
             $publicKey = $helper->getPublicKey();
@@ -50,6 +53,10 @@ class LiqPay extends \LiqPay
         }
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     protected function prepareParams($params)
     {
         if (!isset($params['sandbox'])) {
@@ -67,33 +74,58 @@ class LiqPay extends \LiqPay
         return $params;
     }
 
+    /**
+     * @return \LiqpayMagento\LiqPay\Helper\Data
+     */
     public function getHelper()
     {
         return $this->_helper;
     }
 
+    /**
+     * @return mixed
+     */
     public function getSupportedCurrencies()
     {
         return $this->_supportedCurrencies;
     }
 
+    /**
+     * @param $path
+     * @param array $params
+     * @param int $timeout
+     * @return mixed
+     */
     public function api($path, $params = array(), $timeout = 5)
     {
         $params = $this->prepareParams($params);
         return parent::api($path, $params, $timeout);
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function cnb_form($params)
     {
         $params = $this->prepareParams($params);
         return parent::cnb_form($params);
     }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
     public function getDecodedData($data)
     {
         return json_decode(base64_decode($data), true, 1024);
     }
 
+    /**
+     * @param $signature
+     * @param $data
+     * @return bool
+     */
     public function checkSignature($signature, $data)
     {
         $privateKey = $this->_helper->getPrivateKey();
