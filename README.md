@@ -1,12 +1,12 @@
 plugin-magento
 =============
 
-LiqPay plugin for magento CMS version 2.1
+LiqPay plugin for magento CMS version 2.4
 
 Более подробно о работе с системой Liqpay https://www.liqpay.ua/documentation/ru
 
 Tested for Magento version:
-- 2.1.6
+- 2.4.2
 
 thanks to 
 Volodymyr Konstanchuk http://konstanchuk.com
@@ -32,7 +32,7 @@ php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
 php bin/magento cache:clean
 - все команды должны закончится успешно. В app/etc/config.php должен появится
-данный модуль данный модуль.
+данный модуль.
 
 Настройка:
 - перейдите в admin -> stores -> configuration -> sales -> payment methods -> liqpay

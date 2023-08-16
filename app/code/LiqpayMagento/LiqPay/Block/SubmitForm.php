@@ -54,10 +54,10 @@ class SubmitForm extends Template
         $this->_order = $order;
     }
 
-    protected function _loadCache()
-    {
-        return false;
-    }
+//    protected function _loadCache()
+//    {
+//        return false;
+//    }
 
     protected function _toHtml()
     {

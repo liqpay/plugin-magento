@@ -26,7 +26,6 @@ class Data extends AbstractHelper
     const XML_PATH_TEST_ORDER_SURFIX = 'payment/liqpaymagento_liqpay/sandbox_order_surfix';
     const XML_PATH_DESCRIPTION = 'payment/liqpaymagento_liqpay/description';
     const XML_PATH_CALLBACK_SECURITY_CHECK = 'payment/liqpaymagento_liqpay/security_check';
-
     /**
      * @var PaymentHelper
      */
@@ -43,7 +42,7 @@ class Data extends AbstractHelper
     public function isEnabled()
     {
         if ($this->scopeConfig->getValue(
-            static::XML_PATH_IS_ENABLED,
+            self::XML_PATH_IS_ENABLED,
             ScopeInterface::SCOPE_STORE
         )
         ) {
@@ -59,7 +58,7 @@ class Data extends AbstractHelper
     public function isTestMode()
     {
         return $this->scopeConfig->getValue(
-            static::XML_PATH_TEST_MODE,
+            self::XML_PATH_TEST_MODE,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -67,7 +66,7 @@ class Data extends AbstractHelper
     public function isSecurityCheck()
     {
         return $this->scopeConfig->getValue(
-            static::XML_PATH_CALLBACK_SECURITY_CHECK,
+            self::XML_PATH_CALLBACK_SECURITY_CHECK,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -75,7 +74,7 @@ class Data extends AbstractHelper
     public function getPublicKey()
     {
         return trim($this->scopeConfig->getValue(
-            static::XML_PATH_PUBLIC_KEY,
+            self::XML_PATH_PUBLIC_KEY,
             ScopeInterface::SCOPE_STORE
         ));
     }
@@ -83,7 +82,7 @@ class Data extends AbstractHelper
     public function getPrivateKey()
     {
         return trim($this->scopeConfig->getValue(
-            static::XML_PATH_PRIVATE_KEY,
+            self::XML_PATH_PRIVATE_KEY,
             ScopeInterface::SCOPE_STORE
         ));
     }
@@ -91,7 +90,7 @@ class Data extends AbstractHelper
     public function getTestOrderSurfix()
     {
         return trim($this->scopeConfig->getValue(
-            static::XML_PATH_TEST_ORDER_SURFIX,
+            self::XML_PATH_TEST_ORDER_SURFIX,
             ScopeInterface::SCOPE_STORE
         ));
     }
@@ -99,7 +98,7 @@ class Data extends AbstractHelper
     public function getLiqPayDescription(\Magento\Sales\Api\Data\OrderInterface $order = null)
     {
         $description = trim($this->scopeConfig->getValue(
-            static::XML_PATH_DESCRIPTION,
+            self::XML_PATH_DESCRIPTION,
             ScopeInterface::SCOPE_STORE
         ));
         $params = [
@@ -121,7 +120,7 @@ class Data extends AbstractHelper
             $publicKey = $this->getPublicKey();
             if ($publicKey !== $receivedPublicKey) {
                 return false;
-            }            
+            }
             
             $privateKey = $this->getPrivateKey();
             $generatedSignature = base64_encode(sha1($privateKey . $data . $privateKey, 1));
