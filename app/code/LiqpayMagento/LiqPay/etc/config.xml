@@ -15,7 +15,7 @@
             <liqpaymagento_liqpay>
                 <active>0</active>
                 <sandbox>0</sandbox>
-                <sandbox_order_surfix>test</sandbox_order_surfix>
+<!--                <sandbox_order_surfix>test</sandbox_order_surfix>-->
                 <model>LiqpayMagento\LiqPay\Model\Payment</model>
                 <payment_action>authorize_capture</payment_action>
                 <title>LiqPay</title>

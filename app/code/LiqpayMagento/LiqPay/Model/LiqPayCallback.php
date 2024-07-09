@@ -190,17 +190,17 @@ class LiqPayCallback implements LiqPayCallbackInterface
 
     protected function getRealOrder($status, $orderId)
     {
-        if ($status == LiqPay::STATUS_SANDBOX) {
-            $testOrderSurfix = $this->_helper->getTestOrderSurfix();
-            if (!empty($testOrderSurfix)) {
-                $testOrderSurfix = LiqPay::TEST_MODE_SURFIX_DELIM . $testOrderSurfix;
-                if (strlen($testOrderSurfix) < strlen($orderId)
-                    && substr($orderId, -strlen($testOrderSurfix)) == $testOrderSurfix
-                ) {
-                    $orderId = substr($orderId, 0, strlen($orderId) - strlen($testOrderSurfix));
-                }
-            }
-        }
+//        if ($status == LiqPay::STATUS_SANDBOX) {
+//            $testOrderSurfix = $this->_helper->getTestOrderSurfix();
+//            if (!empty($testOrderSurfix)) {
+//                $testOrderSurfix = LiqPay::TEST_MODE_SURFIX_DELIM . $testOrderSurfix;
+//                if (strlen($testOrderSurfix) < strlen($orderId)
+//                    && substr($orderId, -strlen($testOrderSurfix)) == $testOrderSurfix
+//                ) {
+//                    $orderId = substr($orderId, 0, strlen($orderId) - strlen($testOrderSurfix));
+//                }
+//            }
+//        }
         return $this->_order->loadByIncrementId($orderId);
     }
 }

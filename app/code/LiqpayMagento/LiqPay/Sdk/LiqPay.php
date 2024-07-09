@@ -20,7 +20,7 @@ class LiqPay extends \LiqPay
     const STATUS_SUCCESS           = 'success';
     const STATUS_WAIT_COMPENSATION = 'wait_compensation';
     // const STATUS_SUBSCRIBED        = 'subscribed';
-
+    const STATUS_WAIT_RESERVE      = 'wait_reserve';
     // processing
     const STATUS_PROCESSING  = 'processing';
 
@@ -32,6 +32,10 @@ class LiqPay extends \LiqPay
     const STATUS_WAIT_SECURE = 'wait_secure';
     const STATUS_WAIT_ACCEPT = 'wait_accept';
     const STATUS_WAIT_CARD   = 'wait_card';
+    const STATUS_HOLD_WAIT   = 'hold_wait';
+    
+    // reversed
+    const STATUS_REVERSED    = 'reversed';
     
     // sandbox
     const STATUS_SANDBOX     = 'sandbox';
@@ -52,18 +56,18 @@ class LiqPay extends \LiqPay
 
     protected function prepareParams($params)
     {
-        if (!isset($params['sandbox'])) {
-            $params['sandbox'] = (int)$this->_helper->isTestMode();
-        }
+//        if (!isset($params['sandbox'])) {
+//            $params['sandbox'] = (int)$this->_helper->isTestMode();
+//        }
         if (!isset($params['version'])) {
             $params['version'] = static::VERSION;
         }
-        if (isset($params['order_id']) && $this->_helper->isTestMode()) {
-            $surfix = $this->_helper->getTestOrderSurfix();
-            if (!empty($surfix)) {
-                $params['order_id'] .= self::TEST_MODE_SURFIX_DELIM . $surfix;
-            }
-        }
+//        if (isset($params['order_id']) && $this->_helper->isTestMode()) {
+//            $surfix = $this->_helper->getTestOrderSurfix();
+//            if (!empty($surfix)) {
+//                $params['order_id'] .= self::TEST_MODE_SURFIX_DELIM . $surfix;
+//            }
+//        }
         return $params;
     }
 
@@ -98,6 +102,7 @@ class LiqPay extends \LiqPay
     {
         $privateKey = $this->_helper->getPrivateKey();
         $generatedSignature = base64_encode(sha1($privateKey . $data . $privateKey, 1));
+        
         return $signature == $generatedSignature;
     }
 }

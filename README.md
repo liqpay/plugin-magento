@@ -1,70 +1,74 @@
 plugin-magento
 =============
 
-LiqPay plugin for magento CMS version 2.4
+Плагін LiqPay для Magento CMS версії 2.4
 
-Более подробно о работе с системой Liqpay https://www.liqpay.ua/documentation/ru
+Детальніше про роботу з системою LiqPay https://www.liqpay.ua/documentation/ru
 
-Tested for Magento version:
-- 2.4.2
+Тестовано для версії Magento:
 
-thanks to 
-Volodymyr Konstanchuk http://konstanchuk.com
+    2.4.6
 
-Основные функции:
-- прием платежей с помощью платежней системы LiqPay;
-- отслеживания оплаты;
-- изменения статуса платежа и создания накладной;
-- поддержка тестового режима;
-- использует официальное SDK LiqPay.
+Дякуємо
+Володимир Констанчук http://konstanchuk.com
 
-Установка:
-- установите официально SDK LiqPay следующей командой:
-composer require liqpay/liqpay
-Может понадобится добавления строк
-"minimum-stability": "dev",
-"prefer-stable": true,
-в composer.json
-- скопируйте папку с модулем в корень сайта;
-- запустите следующие команды (может понадобится sudo):
-php bin/magento setup:upgrade
-php bin/magento setup:di:compile
-php bin/magento setup:static-content:deploy
-php bin/magento cache:clean
-- все команды должны закончится успешно. В app/etc/config.php должен появится
-данный модуль.
+Основні функції:
 
-Настройка:
-- перейдите в admin -> stores -> configuration -> sales -> payment methods -> liqpay
-(должен быть в самом низу);
-- указать приватный и публичный ключ в настройках и включить модуль в поле
-Enabled. (если приватный и публичный ключ не указан, он не будет включен)
-- выбрать режим (тестовый или не тестовый)
-- после изменения любой конфигурации нужно чистить кеш (php bin/magento
-cache:clean).
+    прийом платежів за допомогою платіжної системи LiqPay;
+    відстеження оплати;
+    зміна статусу платежу та створення накладної;
+    використовує офіційне SDK LiqPay.
 
-Проверка:
-- положите товар в корзину и перейдите на чекаут.
-- на последнем этапе чекаута в выборе оплаты должен появится метод оплаты LiqPay.
-- если он не появился, смотрите логи в папке [SITE_ROOT]/var/log
-- после выбора ликпея и нажатия на кнопку 'place order' должно перебросить на
-страницу оплаты.
+Встановлення:
+
+    встановіть офіційне SDK LiqPay за допомогою команди:
+    composer require liqpay/liqpay
+    Може знадобитися додавання рядків
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    у composer.json
+    скопіюйте папку з модулем до кореня сайту;
+    запустіть наступні команди (може знадобитися sudo):
+    php bin/magento setup
+    php bin/magento setup:di
+    php bin/magento setup:static-content
+    php bin/magento cache
+    всі команди повинні завершитися успішно. У файлі app/etc/config.php має з'явитися
+    цей модуль.
+
+Налаштування:
+
+    перейдіть до admin -> stores -> configuration -> sales -> payment methods -> liqpay
+    (має бути в самому низу);
+    вкажіть приватний та публічний ключ у налаштуваннях та увімкніть модуль у полі
+    Enabled. (якщо приватний та публічний ключ не вказані, він не буде увімкнений)
+    виберіть режим (тестовий або не тестовий)
+    після зміни будь-якої конфігурації потрібно чистити кеш (php bin/magento
+    cache
+    ).
+
+Перевірка:
+
+    додайте товар до кошика та перейдіть до чекауту.
+    на останньому етапі чекауту у виборі оплати має з'явитися метод оплати LiqPay.
+    якщо він не з'явився, перегляньте логи у папці [SITE_ROOT]/var/log
+    після вибору LiqPay та натискання на кнопку 'place order' має перекинути на
+    сторінку оплати.
 
 Callback:
-для получения результата проведения платежа на сервер нужно:
-- в настройках мерчанта Liqpay указать server_url​ http://your_host/rest/V1/liqpay/callback, где ​http://your_host - адрес вашего сайта.
-- после проведения платежа Liqpay пришлет запрос на http://your_host/rest/V1/liqpay/callback, более подробна на https://www.liqpay.ua/documentation/ru
+для отримання результату проведення платежу на сервер потрібно:
 
+    у налаштуваннях мерчанта Liqpay вказати server_url https://your_host/liqpay/callback/index, де https://your_host - адреса вашого сайту.
+    після проведення платежу Liqpay надішле запит на https://your_host/liqpay/callback/index, детальніше на https://www.liqpay.ua/doc
 
+Вирішення проблем:
 
-Troubleshooting:
+    може знадобитися зміна ліміту пам'яті у файлі конфігурації, наприклад:
+    chown apache
+    /var/www/
+    grep memory_limit /etc/php.ini # встановіть ліміт пам'яті для composer
+    memory_limit = 1280M
+    ;memory_limit = 128M
 
-- может понадобиться изменение лимита памяти в файле конфигурации, например:
-chown apache:root /var/www/
-grep memory_limit /etc/php.ini  # set memory limit for composer
-memory_limit = 1280M
-;memory_limit = 128M
-
-- если товар не добавляется в корзину, попробуйте
-http://magehelper.blogspot.in/2017/03/magento-2-cannot-add-products-to-cart.html
-
+    якщо товар не додається до кошика, спробуйте
+    http://magehelper.blogspot.in/2017/03/magento-2-cannot-add-products-to-cart.html

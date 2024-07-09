@@ -74,7 +74,7 @@ class Form extends Action
                     'content' => $formBlock->toHtml(),
                 ];
             } else {
-                throw new \Exception('Order payment method is not a LiqPay payment method');
+                throw new \Exception(__('Order payment method is not a LiqPay payment method'));
             }
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('Something went wrong, please try again later'));
