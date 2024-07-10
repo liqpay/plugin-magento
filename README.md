@@ -3,7 +3,7 @@ plugin-magento
 
 Плагін LiqPay для Magento CMS версії 2.4
 
-Детальніше про роботу з системою LiqPay https://www.liqpay.ua/documentation/ru
+Детальніше про роботу з системою LiqPay [https://www.liqpay.ua/doc](https://www.liqpay.ua/doc)
 
 Тестовано для версії Magento:
 
