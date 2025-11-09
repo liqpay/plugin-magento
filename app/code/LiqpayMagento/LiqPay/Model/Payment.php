@@ -93,7 +93,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         }
     }
 
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if (!$this->_liqPay->getHelper()->isEnabled()) {
             return false;
