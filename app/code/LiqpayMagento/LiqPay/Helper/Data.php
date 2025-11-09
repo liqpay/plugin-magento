@@ -95,7 +95,7 @@ class Data extends AbstractHelper
         ));
     }
 
-    public function getLiqPayDescription(\Magento\Sales\Api\Data\OrderInterface $order = null)
+    public function getLiqPayDescription(?\Magento\Sales\Api\Data\OrderInterface $order = null)
     {
         $description = trim($this->scopeConfig->getValue(
             self::XML_PATH_DESCRIPTION,
